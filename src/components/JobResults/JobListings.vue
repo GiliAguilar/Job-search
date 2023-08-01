@@ -37,7 +37,7 @@
 import JobListing from '@/components/JobResults/JobListing.vue';
 
 import { mapActions, mapState } from 'pinia';
-import { useJobsStore, FETCH_JOBS } from '@/stores/jobs.js';
+import { useJobsStore, FETCH_JOBS, FILTERED_JOBS_BY_ORGANIZATIONS } from '@/stores/jobs.js';
 
 export default {
   name: 'JobListings',
@@ -50,7 +50,8 @@ export default {
   //   };
   // },
   computed: {
-    ...mapState(useJobsStore, ['jobs']),
+    ...mapState(useJobsStore, [FILTERED_JOBS_BY_ORGANIZATIONS]),
+    // ...mapState(useJobsStore, ['jobs']),
     //también se puede pasar un segundo argumento que sea un objeto y no un array, lo único es que dentro del objeto habrá que definir un nombre de method/propertie y a ese asignarle el nombre en string de que state estará apuntando, osea { cualquierNombre: 'jobs'}, entonces ahora tendríamos this.cualquierNombre, el cual devuelve el state de jobs de nuestro store "jobs" de nuestro archivo "jobs.js"
 
     currentPage() {
@@ -60,7 +61,8 @@ export default {
       return this.currentPage - 1 >= 1 ? this.currentPage - 1 : undefined;
     },
     nextPage() {
-      return this.currentPage + 1 <= Math.ceil(this.jobs.length / 10)
+      // return this.currentPage + 1 <= Math.ceil(this.jobs.length / 10)
+      return this.currentPage + 1 <= Math.ceil(this.FILTERED_JOBS_BY_ORGANIZATIONS.length / 10)
         ? this.currentPage + 1
         : undefined;
     },
@@ -70,8 +72,13 @@ export default {
       //no necesita ser llamada la función, Vue lo hará al estar en computed
       // const lengthJobIndex = this.jobs.length;
       const firstJobIndex = (pageNumber - 1) * 10;
-      const lastJobIndex = pageNumber * 10 < this.jobs.length ? pageNumber * 10 : this.jobs.length;
-      return this.jobs.slice(firstJobIndex, lastJobIndex);
+      const lastJobIndex =
+        pageNumber * 10 < this.FILTERED_JOBS_BY_ORGANIZATIONS.length
+          ? pageNumber * 10
+          : this.FILTERED_JOBS_BY_ORGANIZATIONS.length;
+      // const lastJobIndex = pageNumber * 10 < this.jobs.length ? pageNumber * 10 : this.jobs.length;
+      return this.FILTERED_JOBS_BY_ORGANIZATIONS.slice(firstJobIndex, lastJobIndex);
+      // return this.jobs.slice(firstJobIndex, lastJobIndex);
     },
   },
 

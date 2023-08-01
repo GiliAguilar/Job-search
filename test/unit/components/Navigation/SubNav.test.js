@@ -1,10 +1,17 @@
 import { render, screen } from '@testing-library/vue';
 import SubNav from '@/components/Navigation/SubNav.vue';
 
+import { useJobsStore } from '@/stores/jobs';
+import { createTestingPinia } from '@pinia/testing';
+
 describe('SubNav', () => {
   const renderTheSubNav = (routeName) => {
+    const pinia = createTestingPinia();
+    const jobsStore = useJobsStore();
+
     render(SubNav, {
       global: {
+        plugins: [pinia],
         mocks: {
           $route: {
             name: routeName,
@@ -19,23 +26,32 @@ describe('SubNav', () => {
     });
 
     //nuestro SubNave.vue busca una variable global $router para verificar si estamos en SubNave, y eso es lo que estamos simulando con mocks
+
+    return { jobsStore };
   };
 
   describe('When user is on jobs page', () => {
-    it('Displays job count', () => {
+    it('Displays job count', async () => {
       const routeName = 'JobResults';
-      renderTheSubNav(routeName);
+      const { jobsStore } = renderTheSubNav(routeName);
 
-      const jobCount = screen.getByText('1653');
+      const numberOfJobs = 16;
+      jobsStore.FILTERED_JOBS_BY_ORGANIZATIONS = Array(numberOfJobs).fill({});
+
+      const jobCount = await screen.findByText(numberOfJobs);
       expect(jobCount).toBeInTheDocument();
     });
   });
-  describe('When user is not on jobs page', () => {
-    it('It does not displays job count', () => {
-      const routeName = 'Home';
-      renderTheSubNav(routeName);
 
-      const jobCount = screen.queryByText('1653');
+  describe('When user is not on jobs page', () => {
+    it('It does NOT displays job count', () => {
+      const routeName = 'Home';
+      const { jobsStore } = renderTheSubNav(routeName);
+
+      const numberOfJobs = 16;
+      jobsStore.FILTERED_JOBS_BY_ORGANIZATIONS = Array(numberOfJobs).fill({});
+
+      const jobCount = screen.queryByText(numberOfJobs);
       expect(jobCount).not.toBeInTheDocument();
     });
   });
