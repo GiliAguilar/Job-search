@@ -7,9 +7,9 @@
             :id="i"
             v-model="selectedOrganizations"
             :value="i"
-            @change="selectOrganization"
             type="checkbox"
             class="mr-3"
+            @change="selectOrganization"
           />
           <!-- aquí, el :id lo que hace es como poner de referencia que este input tendrá nombre id=i, luego con v-model lo que hacemos es decirle a Vue que la variable que esté pasando por aquí se vaya a donde le indicamos (v-model="selectedOrganizations"), y luego la variable que pasa por aquí se asigna con value=i, para que sea de forma dinámica que asigne valores, siempre se pone v-bind ante de value y id (":")
 
@@ -51,6 +51,7 @@ export default {
     selectOrganization() {
       this.ADD_SELECTED_ORGANIZATIONS(this.selectedOrganizations);
       //aquí lo que hacemos es, primero que nada, todo lo que venga de pinia y sean "actions", debe ser importado con ...mapActions y pasa a formar parte de this., pero no significa que se ejecute la acción o se haya llamado, por tanto, usamos esta función de selectOrganization() para que, al ser llamada esta función, podamos llamar a la función de ADD_SELECTED_ORGANIZATIONS, y le pasamos como parámetro nuestro Array que contiene nuestra selección, notoese que nuestra selección depende previamente de un checkbox, por consiguiente, si el usuario quita un checkbox automáticamente será elminada esa entrada de nuestro array "selectedOrganizations"
+      this.$router.push({ name: 'JobResults' });
     },
   },
 };

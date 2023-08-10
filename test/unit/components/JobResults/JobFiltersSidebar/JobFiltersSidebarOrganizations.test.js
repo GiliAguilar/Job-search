@@ -11,9 +11,13 @@ describe('JobFiltersSidebarOrganizations', () => {
     const pinia = createTestingPinia();
     const userStore = useUserStore();
     const jobsStore = useJobsStore();
+    const $router = { push: vi.fn() };
 
     render(JobFiltersSidebarOrganizations, {
       global: {
+        mocks: {
+          $router,
+        },
         plugins: [pinia],
         stubs: {
           FontAwesomeIcon: true,
@@ -21,7 +25,7 @@ describe('JobFiltersSidebarOrganizations', () => {
       },
     });
 
-    return { jobsStore, userStore };
+    return { jobsStore, userStore, $router };
   };
 
   it('renders unique list of organizations from jobs', async () => {
@@ -40,20 +44,38 @@ describe('JobFiltersSidebarOrganizations', () => {
     expect(organizations).toEqual(['Google', 'Amazon']);
   });
 
-  it('communicates that user has selected checkbos for oganization', async () => {
-    const { userStore, jobsStore } = renderJobFiltersSidebarOrganizations();
+  describe('when user clicks checkbox', () => {
+    it('communicates that user has selected checkbos for oganization', async () => {
+      const { userStore, jobsStore } = renderJobFiltersSidebarOrganizations();
 
-    jobsStore.UNIQUE_ORGANIZATIONS = new Set(['Google', 'Amazon']);
+      jobsStore.UNIQUE_ORGANIZATIONS = new Set(['Google', 'Amazon']);
 
-    const button = screen.getByRole('button', { name: /Organization/i });
-    await userEvent.click(button);
+      const button = screen.getByRole('button', { name: /Organization/i });
+      await userEvent.click(button);
 
-    const googleCheckbox = screen.getByRole('checkbox', {
-      name: /Google/i,
+      const googleCheckbox = screen.getByRole('checkbox', {
+        name: /Google/i,
+      });
+      await userEvent.click(googleCheckbox);
+      //aquí estamos simulando que le hemos dado click al checkbox de google, primero utilizando un fake de click en organization, luego un fake de click en el checkbox de google
+
+      expect(userStore.ADD_SELECTED_ORGANIZATIONS).toHaveBeenCalledWith(['Google']);
     });
-    await userEvent.click(googleCheckbox);
-    //aquí estamos simulando que le hemos dado click al checkbox de google, primero utilizando un fake de click en organization, luego un fake de click en el checkbox de google
 
-    expect(userStore.ADD_SELECTED_ORGANIZATIONS).toHaveBeenCalledWith(['Google']);
+    it('navigates user to job results page to see fresh batch of filtered jobs', async () => {
+      const { $router, jobsStore } = renderJobFiltersSidebarOrganizations();
+
+      jobsStore.UNIQUE_ORGANIZATIONS = new Set(['Google']);
+
+      const button = screen.getByRole('button', { name: /Organization/i });
+      await userEvent.click(button);
+
+      const googleCheckbox = screen.getByRole('checkbox', {
+        name: /Google/i,
+      });
+      await userEvent.click(googleCheckbox);
+
+      expect($router.push).toHaveBeenCalledWith({ name: 'JobResults' });
+    });
   });
 });
