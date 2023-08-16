@@ -10,23 +10,28 @@ import MainNav from '@/components/Navigation/MainNav.vue';
 import { useUserStore } from '@/stores/user.js';
 //esto lo usamos si ponemos stubAction: true
 
+import { useRoute } from 'vue-router';
+vi.mock('vue-router');
+
 const renderMainNav = () => {
   const pinia = createTestingPinia({
     stubActions: true,
     //significa que va a sustituir todas las acciones con mocks, pero si ponemos false, usará los datos reales de nuestro archivo que tiene la configuración de pinia
   });
 
-  const $route = {
-    name: 'Home',
-  };
+  useRoute.mockReturnValue({ name: 'Home' });
+  // const $route = {
+  //   name: 'Home',
+  // };
 
   render(MainNav, {
     global: {
       plugins: [pinia],
       //aquí conectamos pinia con render, creo...
-      mocks: {
-        $route,
-      },
+      // mocks: {
+      //   $route,
+      // },
+      //Vue 2 y 3
       stubs: {
         FontAwesomeIcon: true,
         //El test no tiene forma de saber que es fontawesome porque es algo global que añadimos, que no conoce, para evitar que de problemas, se utiliza global, lo que recibe un objeto, y dentro de el se utiliza un resguardo, un sustituto ligero dentro del virtual DOM que se crea con render, ese es stubs:, el cual también recibe un objeto... dentro especificamos a que nos referimos y asignamos true, eso en el virutal DOM sustituye (en este caso) el icono por algo más que el entiende y que no necesita renderizar.

@@ -6,18 +6,24 @@ import JobFiltersSidebarJobTypes from '@/components/JobResults/JobFiltersSidebar
 import { useJobsStore } from '@/stores/jobs';
 import { useUserStore } from '@/stores/user';
 
+import { useRouter } from 'vue-router';
+vi.mock('vue-router');
+
 describe('JobFiltersSidebarJobTypes', () => {
   const renderJobFiltersSidebarJobTypes = () => {
     const pinia = createTestingPinia();
     const userStore = useUserStore();
     const jobsStore = useJobsStore();
-    const $router = { push: vi.fn() };
+
+    // const $router = { push: vi.fn() };
+    //Vue 2 y 3 mix
 
     render(JobFiltersSidebarJobTypes, {
       global: {
-        mocks: {
-          $router,
-        },
+        // mocks: {
+        //   $router,
+        // },
+        //Vue 2 y 3 mix
         plugins: [pinia],
         stubs: {
           FontAwesomeIcon: true,
@@ -25,7 +31,8 @@ describe('JobFiltersSidebarJobTypes', () => {
       },
     });
 
-    return { jobsStore, userStore, $router };
+    return { jobsStore, userStore };
+    // return { jobsStore, userStore, $router };
   };
 
   it('renders unique list of job from jobs', async () => {
@@ -45,6 +52,9 @@ describe('JobFiltersSidebarJobTypes', () => {
 
   describe('when user clicks checkbox', () => {
     it('communicates that user has selected checkbos for job types', async () => {
+      useRouter.mockReturnValue({ push: vi.fn() });
+      //Vue 3.2
+
       const { userStore, jobsStore } = renderJobFiltersSidebarJobTypes();
 
       jobsStore.UNIQUE_JOB_TYPES = new Set(['Full-time', 'Part-time']);
@@ -61,7 +71,13 @@ describe('JobFiltersSidebarJobTypes', () => {
     });
 
     it('navigates user to job results page to see fresh batch of filtered jobs', async () => {
-      const { $router, jobsStore } = renderJobFiltersSidebarJobTypes();
+      const push = vi.fn();
+      useRouter.mockReturnValue({ push });
+      //Vue 3.2
+
+      const { jobsStore } = renderJobFiltersSidebarJobTypes();
+      // const { jobsStore, $router } = renderJobFiltersSidebarJobTypes();
+      //Vue 2 y 3 mix
 
       jobsStore.UNIQUE_JOB_TYPES = new Set(['Full-time']);
 
@@ -73,7 +89,10 @@ describe('JobFiltersSidebarJobTypes', () => {
       });
       await userEvent.click(fullTimeCheckbox);
 
-      expect($router.push).toHaveBeenCalledWith({ name: 'JobResults' });
+      expect(push).toHaveBeenCalledWith({ name: 'JobResults' });
+      //Vue 3.2
+      // expect($router.push).toHaveBeenCalledWith({ name: 'JobResults' });
+      //Vue 2 y 3 mix
     });
   });
 });

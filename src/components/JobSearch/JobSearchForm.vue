@@ -41,7 +41,8 @@
   </form>
 </template>
 
-<script>
+<!-- Vue 2 y 3 mix, old form -->
+<!-- <script>
 import ActionButton from '@/components/Shared/ActionButton.vue';
 import TextInput from '@/components/Shared/TextInput.vue';
 
@@ -79,5 +80,29 @@ export default {
       });
     },
   },
+};
+</script> -->
+
+<!-- Vue 3.2 new form -->
+<script setup>
+import ActionButton from '@/components/Shared/ActionButton.vue';
+import TextInput from '@/components/Shared/TextInput.vue';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const role = ref('');
+const location = ref('');
+
+const router = useRouter();
+//como no tenemos acceso a this.$router, usamos una función nueva llamada useRouter(), importada de "vue-router", que nos dará como resultado un objeto router que hace exactamente lo mismo
+
+const searchForJobs = () => {
+  router.push({
+    name: 'JobResults',
+    query: {
+      role: role.value,
+      location: location.value,
+    },
+  });
 };
 </script>

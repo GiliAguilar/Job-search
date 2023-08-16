@@ -10,14 +10,25 @@
 
       <CollapsibleAccordion header="Degree"></CollapsibleAccordion>
 
-      <job-filters-sidebar-job-types />
+      <job-filters-sidebar-checkbox-group
+        header="Job types"
+        :unique-values="UNIQUE_JOB_TYPES"
+        :action="userStore.ADD_SELECTED_JOB_TYPES"
+      />
+      <job-filters-sidebar-checkbox-group
+        header="Organizations"
+        :unique-values="UNIQUE_ORGANIZATIONS"
+        :action="userStore.ADD_SELECTED_ORGANIZATIONS"
+      />
 
-      <job-filters-sidebar-organizations />
+      <!-- <job-filters-sidebar-job-types />
+      <job-filters-sidebar-organizations /> -->
     </section>
   </div>
 </template>
 
-<script>
+<!-- Vue 2 y 3, old mix -->
+<!-- <script>
 import ActionButton from '@/components/Shared/ActionButton.vue';
 import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
 import JobFiltersSidebarOrganizations from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarOrganizations.vue';
@@ -32,4 +43,21 @@ export default {
     JobFiltersSidebarJobTypes,
   },
 };
+</script> -->
+
+<!-- Vue 3.2, new form, replacing old jobFilterSidebard -->
+<script setup>
+import ActionButton from '@/components/Shared/ActionButton.vue';
+import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
+import { computed } from 'vue';
+import JobFiltersSidebarCheckboxGroup from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarCheckboxGroup.vue';
+
+import { useUserStore } from '@/stores/user.js';
+import { useJobsStore } from '@/stores/jobs.js';
+
+const jobsStore = useJobsStore();
+const userStore = useUserStore();
+
+const UNIQUE_ORGANIZATIONS = computed(() => jobsStore.UNIQUE_ORGANIZATIONS);
+const UNIQUE_JOB_TYPES = computed(() => jobsStore.UNIQUE_JOB_TYPES);
 </script>

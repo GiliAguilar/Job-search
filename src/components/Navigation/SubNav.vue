@@ -13,7 +13,8 @@
   </div>
 </template>
 
-<script>
+<!-- Vue 2 y 3 mix, old form -->
+<!-- <script>
 import { mapState } from 'pinia';
 import { useJobsStore, FILTERED_JOBS } from '@/stores/jobs';
 
@@ -27,4 +28,23 @@ export default {
     },
   },
 };
+</script> -->
+
+<!-- Vue 3.2, new form -->
+<script setup>
+import { useJobsStore } from '@/stores/jobs';
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const onJobResultsPage = computed(() => {
+  return route.name === 'JobResults';
+});
+
+const jobsStore = useJobsStore();
+//useJobsStore() es ya un elemento reactivo, por lo que ya no necesitampos utilizar mapState(useJobsStore, [FILTERED_JOBS]) para obtener FILTERED_JOBS, simplemente llamamos a useJobsStore y lo almacenamos en un const y listo.
+const FILTERED_JOBS = computed(() => jobsStore.FILTERED_JOBS);
+//aquí const FILTERED_JOBS nos devuelve un objeto reactivo, básicamente nos devuelve FILTERED_JOBS = { value: ZZZ }, sin embargo, al llamar a cualquier elemento reactivo de nuestro <script setup>, osea al llamarlo desde <template>, Vue reconoce que es un objeto reactivo y elimina la necesidad de usar FILTERED_JOBS.value, automáticamente busca value, por lo que poner simplemente FILTERED_JOBS basta.
+//Ahora bien, jobsStore.FILTERED_JOBS hace referencia a información de una función reactiva, pero la información es copiada aquí y deja de ser reactiva, por tal razón, y como realmente lo que nos devuelve es un array, debemos usar computed, pues necesitamos que observe cambios
 </script>

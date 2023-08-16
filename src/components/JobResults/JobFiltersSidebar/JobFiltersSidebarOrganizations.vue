@@ -22,7 +22,8 @@
   </collapsible-accordion>
 </template>
 
-<script>
+<!-- VUe 2 y 3 mix, old form -->
+<!-- <script>
 import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
 import { mapState, mapActions } from 'pinia';
 import { useJobsStore, UNIQUE_ORGANIZATIONS } from '@/stores/jobs';
@@ -54,5 +55,24 @@ export default {
       this.$router.push({ name: 'JobResults' });
     },
   },
+};
+</script> -->
+
+<script setup>
+import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
+import { useJobsStore } from '@/stores/jobs';
+import { useUserStore } from '@/stores/user';
+import { computed, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+const selectedOrganizations = ref([]);
+const jobsStore = useJobsStore();
+const userStore = useUserStore();
+const UNIQUE_ORGANIZATIONS = computed(() => jobsStore.UNIQUE_ORGANIZATIONS);
+
+const selectOrganization = () => {
+  userStore.ADD_SELECTED_ORGANIZATIONS(selectedOrganizations.value);
+  router.push({ name: 'JobResults' });
 };
 </script>

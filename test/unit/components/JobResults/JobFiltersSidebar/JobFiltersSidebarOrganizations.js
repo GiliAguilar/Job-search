@@ -6,18 +6,24 @@ import JobFiltersSidebarOrganizations from '@/components/JobResults/JobFiltersSi
 import { useJobsStore } from '@/stores/jobs';
 import { useUserStore } from '@/stores/user';
 
+import { useRouter } from 'vue-router';
+vi.mock('vue-router');
+
 describe('JobFiltersSidebarOrganizations', () => {
   const renderJobFiltersSidebarOrganizations = () => {
     const pinia = createTestingPinia();
     const userStore = useUserStore();
     const jobsStore = useJobsStore();
-    const $router = { push: vi.fn() };
+
+    // const $router = { push: vi.fn() };
+    //Vue 2 y 3 mix
 
     render(JobFiltersSidebarOrganizations, {
       global: {
-        mocks: {
-          $router,
-        },
+        // mocks: {
+        //   $router,
+        // },
+        //Vue 2 y 3 mix
         plugins: [pinia],
         stubs: {
           FontAwesomeIcon: true,
@@ -25,7 +31,8 @@ describe('JobFiltersSidebarOrganizations', () => {
       },
     });
 
-    return { jobsStore, userStore, $router };
+    return { jobsStore, userStore };
+    // return { jobsStore, userStore, $router };
   };
 
   it('renders unique list of organizations from jobs', async () => {
@@ -46,6 +53,9 @@ describe('JobFiltersSidebarOrganizations', () => {
 
   describe('when user clicks checkbox', () => {
     it('communicates that user has selected checkbos for oganization', async () => {
+      useRouter.mockReturnValue({ push: vi.fn() });
+      //Vue 3.2. No rompe la prueba, pero si no se pone pondrá una adevertencia que no existe forma de recrear un push al haber hecho un click en checkbox.
+
       const { userStore, jobsStore } = renderJobFiltersSidebarOrganizations();
 
       jobsStore.UNIQUE_ORGANIZATIONS = new Set(['Google', 'Amazon']);
@@ -63,7 +73,12 @@ describe('JobFiltersSidebarOrganizations', () => {
     });
 
     it('navigates user to job results page to see fresh batch of filtered jobs', async () => {
-      const { $router, jobsStore } = renderJobFiltersSidebarOrganizations();
+      const push = vi.fn();
+      useRouter.mockReturnValue({ push });
+
+      const { jobsStore } = renderJobFiltersSidebarOrganizations();
+      // const { $router, jobsStore } = renderJobFiltersSidebarOrganizations();
+      //Vue 2 y 3 mix
 
       jobsStore.UNIQUE_ORGANIZATIONS = new Set(['Google']);
 
@@ -75,7 +90,7 @@ describe('JobFiltersSidebarOrganizations', () => {
       });
       await userEvent.click(googleCheckbox);
 
-      expect($router.push).toHaveBeenCalledWith({ name: 'JobResults' });
+      expect(push).toHaveBeenCalledWith({ name: 'JobResults' });
     });
   });
 });
