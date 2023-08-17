@@ -8,7 +8,8 @@
   </ul>
 </template>
 
-<script>
+<!-- Vue 2 y 3, old form -->
+<!-- <script>
 import axios from 'axios';
 
 export default {
@@ -26,4 +27,20 @@ export default {
     this.spotlights = response.data;
   },
 };
+</script> -->
+
+<script setup>
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+//básicamente, todas nuestras funciones de Vue Cicling Hook, o del ciclo de Vue, están disponiebles como funciones, utilizando el prefijo "on" de primero, onMounted, onCreate, etc...
+
+const spotlights = ref([]);
+const getSpotlights = async () => {
+  const baseUrl = import.meta.env.VITE_APP_API_URL;
+  const url = `${baseUrl}/spotlights`;
+  const response = await axios.get(url);
+  spotlights.value = response.data;
+};
+onMounted(getSpotlights);
+//onMounted es el equivalente de mounted() básicamente, este recibe funciones como parametros, la cuales se van a ejecutar cuando el DOM esté montado
 </script>

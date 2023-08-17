@@ -40,7 +40,8 @@
   </li>
 </template>
 
-<script>
+<!-- Vue 2 y 3, mix old form -->
+<!-- <script>
 export default {
   name: 'JobListing',
   props: {
@@ -57,4 +58,18 @@ export default {
     },
   },
 };
+</script> -->
+
+<!-- Vue 3.2 -->
+<script setup>
+import { defineProps } from 'vue';
+
+const props = defineProps({
+  job: {
+    type: Object,
+    require: true,
+    default: null,
+  },
+});
+const jobPageLink = () => `/jobs/results/${props.job.id}`;
 </script>

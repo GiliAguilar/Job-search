@@ -32,7 +32,8 @@
   </main>
 </template>
 
-<script>
+<!-- Vue 2 y 3 mix, old form -->
+<!-- <script>
 // import axios from 'axios';
 import JobListing from '@/components/JobResults/JobListing.vue';
 
@@ -100,4 +101,33 @@ export default {
     //mapActions a su vez va a llamar correctamente el actions correspondiente y ponerlo en this, osea, ahora podemos llamar en cualquier parte a this.FETCH_JOBS(), que actualizará nuestro state de jobs de nuestro archivo jobs.js con la respuesta de la API... como nuestro state jobs habrá sido modificado, computed se ejecuta, por lo que mapState nos va a devolver el array que contiene el listado de información del API (nuestro array que contiene nuestros trabajos) y lo pondrá disponible en this también, osea que tendremos disponible this.jobs, y por consiguiente se ejecta también todo lo que restaría actualizar contenido en computed, simple verdad?.
   },
 };
+</script> -->
+
+<script setup>
+import JobListing from '@/components/JobResults/JobListing.vue';
+import { useJobsStore } from '@/stores/jobs.js';
+import { onMounted, computed } from 'vue';
+import { useRoute } from 'vue-router';
+import usePreviosAndNextPages from '@/composables/usePreviosAndNextPages.js';
+
+const jobsStore = useJobsStore();
+const route = useRoute();
+const FILTERED_JOBS = computed(() => jobsStore.FILTERED_JOBS);
+
+const currentPage = computed(() => Number.parseInt(route.query.page || '1'));
+const maxPage = computed(() => Math.ceil(FILTERED_JOBS.value.length / 10));
+
+const { previousPage, nextPage } = usePreviosAndNextPages(currentPage, maxPage);
+//no se necestia usar ref o toRef porque usePreviosAndNExtPages devuelve dos funciones ya reactivas que no vamos a sobreescribir
+
+const displayedJobs = computed(() => {
+  const pageNumber = currentPage.value;
+  const firstJobIndex = (pageNumber - 1) * 10;
+  const lastJobIndex =
+    pageNumber * 10 < FILTERED_JOBS.value.length ? pageNumber * 10 : FILTERED_JOBS.value.length;
+  // const lastJobIndex = pageNumber * 10 < this.jobs.length ? pageNumber * 10 : this.jobs.length;
+  return FILTERED_JOBS.value.slice(firstJobIndex, lastJobIndex);
+});
+
+onMounted(jobsStore.FETCH_JOBS);
 </script>
