@@ -31,7 +31,7 @@ export default {
 </script> -->
 
 <!-- Vue 3.2, new form -->
-<script setup>
+<script lang="ts" setup>
 import { useJobsStore } from '@/stores/jobs';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';

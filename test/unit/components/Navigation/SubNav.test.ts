@@ -1,3 +1,5 @@
+import type { Mock } from 'vitest';
+
 import { render, screen } from '@testing-library/vue';
 import SubNav from '@/components/Navigation/SubNav.vue';
 
@@ -6,6 +8,7 @@ import { createTestingPinia } from '@pinia/testing';
 
 import { useRoute } from 'vue-router';
 vi.mock('vue-router');
+const useRouteMock = useRoute as Mock;
 
 describe('SubNav', () => {
   const renderTheSubNav = () => {
@@ -39,7 +42,8 @@ describe('SubNav', () => {
   describe('When user is on jobs page', () => {
     it('Displays job count', async () => {
       //Vue 3.2
-      useRoute.mockReturnValue({ name: 'JobResults' });
+      useRouteMock.mockReturnValue({ name: 'JobResults' });
+      // useRoute.mockReturnValue({ name: 'JobResults' });
 
       // const routeName = 'JobResults';
 
@@ -47,6 +51,7 @@ describe('SubNav', () => {
       // const { jobsStore } = renderTheSubNav(routeName);
 
       const numberOfJobs = 16;
+
       jobsStore.FILTERED_JOBS = Array(numberOfJobs).fill({});
 
       const jobCount = await screen.findByText(numberOfJobs);
@@ -56,7 +61,8 @@ describe('SubNav', () => {
 
   describe('When user is not on jobs page', () => {
     it('It does NOT displays job count', () => {
-      useRoute.mockReturnValue({ name: 'Home' });
+      useRouteMock.mockReturnValue({ name: 'Home' });
+      // useRoute.mockReturnValue({ name: 'Home' });
 
       // const routeName = 'Home';
       const { jobsStore } = renderTheSubNav();

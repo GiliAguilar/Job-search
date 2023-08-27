@@ -103,18 +103,19 @@ export default {
 };
 </script> -->
 
-<script setup>
+<script lang="ts" setup>
 import JobListing from '@/components/JobResults/JobListing.vue';
-import { useJobsStore } from '@/stores/jobs.js';
+import { useJobsStore } from '@/stores/jobs';
 import { onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
-import usePreviosAndNextPages from '@/composables/usePreviosAndNextPages.js';
+import usePreviosAndNextPages from '@/composables/usePreviosAndNextPages';
 
 const jobsStore = useJobsStore();
 const route = useRoute();
 const FILTERED_JOBS = computed(() => jobsStore.FILTERED_JOBS);
 
-const currentPage = computed(() => Number.parseInt(route.query.page || '1'));
+const currentPage = computed(() => Number.parseInt((route.query.page as string) || '1'));
+//aquí le debemos decir que route.query.page será un string siempre
 const maxPage = computed(() => Math.ceil(FILTERED_JOBS.value.length / 10));
 
 const { previousPage, nextPage } = usePreviosAndNextPages(currentPage, maxPage);

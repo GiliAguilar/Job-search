@@ -1,3 +1,5 @@
+import type { Mock } from 'vitest';
+
 import { render, screen } from '@testing-library/vue';
 import { RouterLinkStub } from '@vue/test-utils';
 import { createTestingPinia } from '@pinia/testing';
@@ -14,6 +16,7 @@ import { useJobsStore } from '@/stores/jobs';
 import { useRoute } from 'vue-router';
 import { vi } from 'vitest';
 vi.mock('vue-router');
+const useRouteMock = useRoute as Mock;
 
 describe('JobListings', () => {
   const renderJobListing = () => {
@@ -50,7 +53,8 @@ describe('JobListings', () => {
     // axios.get.mockResolvedValue({ data: [] });
     //axios.get.mockResolvedValue() lo que hará el mockResolvedValue es simular una respuesta de nuestro API, osea, el contenido que le pasamos va a simular que es la respuesta de nuestro API que se obtuvo a través de get
 
-    useRoute.mockReturnValue({ query: {} });
+    useRouteMock.mockReturnValue({ query: {} });
+    // useRoute.mockReturnValue({ query: {} });
     const { jobsStore } = renderJobListing();
     //Vue 3.2
 
@@ -67,7 +71,8 @@ describe('JobListings', () => {
     // axios.get.mockResolvedValue({ data: Array(15).fill({}) });
     //Array(#).fill() lo que hace es que crea un array, o varios array, en este caso 15, y luego con fill los llena con lo mismo a todos, en este caso, un objeto vacío.
 
-    useRoute.mockReturnValue({ query: { page: '1' } });
+    useRouteMock.mockReturnValue({ query: { page: '1' } });
+    // useRoute.mockReturnValue({ query: { page: '1' } });
     const { jobsStore } = renderJobListing();
     jobsStore.FILTERED_JOBS = Array(15).fill({});
     //Vue 3.2
@@ -84,7 +89,8 @@ describe('JobListings', () => {
 
   describe('when params exclude page number', () => {
     it('displays page number 1', () => {
-      useRoute.mockReturnValue({ query: { page: '1' } });
+      useRouteMock.mockReturnValue({ query: { page: '1' } });
+      // useRoute.mockReturnValue({ query: { page: '1' } });
       //Vue 3.2
 
       renderJobListing();
@@ -93,7 +99,8 @@ describe('JobListings', () => {
     });
 
     it('displays page number 3', () => {
-      useRoute.mockReturnValue({ query: { page: '3' } });
+      useRouteMock.mockReturnValue({ query: { page: '3' } });
+      // useRoute.mockReturnValue({ query: { page: '3' } });
       //Vue 3.2
       renderJobListing();
 
@@ -104,7 +111,8 @@ describe('JobListings', () => {
   describe('when user is on first page', () => {
     it('does not show link to previous page', async () => {
       // axios.get.mockResolvedValue({ data: Array(15).fill({}) });
-      useRoute.mockReturnValue({ query: { page: '1' } });
+      useRouteMock.mockReturnValue({ query: { page: '1' } });
+      // useRoute.mockReturnValue({ query: { page: '1' } });
       //Vue 3.2
 
       // renderJobListing();
@@ -125,7 +133,8 @@ describe('JobListings', () => {
 
     it('shows link to next page', async () => {
       // axios.get.mockResolvedValue({ data: Array(15).fill({}) });
-      useRoute.mockReturnValue({ query: { page: '1' } });
+      useRouteMock.mockReturnValue({ query: { page: '1' } });
+      // useRoute.mockReturnValue({ query: { page: '1' } });
       const { jobsStore } = renderJobListing();
       jobsStore.FILTERED_JOBS = Array(15).fill({});
       //Vue 3.2
@@ -145,7 +154,8 @@ describe('JobListings', () => {
   describe('when user is on last page', () => {
     it('does not show link to next page', async () => {
       // axios.get.mockResolvedValue({ data: Array(15).fill({}) });
-      useRoute.mockReturnValue({ query: { page: '2' } });
+      useRouteMock.mockReturnValue({ query: { page: '2' } });
+      // useRoute.mockReturnValue({ query: { page: '2' } });
       const { jobsStore } = renderJobListing();
       jobsStore.FILTERED_JOBS = Array(15).fill({});
       //Vue 3.2
@@ -164,7 +174,8 @@ describe('JobListings', () => {
 
     it('shows link to previous page', async () => {
       // axios.get.mockResolvedValue({ data: Array(15).fill({}) });
-      useRoute.mockReturnValue({ query: { page: '2' } });
+      useRouteMock.mockReturnValue({ query: { page: '2' } });
+      // useRoute.mockReturnValue({ query: { page: '2' } });
       const { jobsStore } = renderJobListing();
       jobsStore.FILTERED_JOBS = Array(15).fill({});
       //Vue 3.2

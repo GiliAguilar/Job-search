@@ -1,3 +1,5 @@
+import type { Mock } from 'vitest';
+
 import { render, screen } from '@testing-library/vue';
 import userEvent from '@testing-library/user-event';
 import { RouterLinkStub } from '@vue/test-utils';
@@ -7,11 +9,13 @@ import { createTestingPinia } from '@pinia/testing';
 
 import MainNav from '@/components/Navigation/MainNav.vue';
 
-import { useUserStore } from '@/stores/user.js';
+import { useUserStore } from '@/stores/user';
 //esto lo usamos si ponemos stubAction: true
 
 import { useRoute } from 'vue-router';
 vi.mock('vue-router');
+
+const useRouteMock = useRoute as Mock;
 
 const renderMainNav = () => {
   const pinia = createTestingPinia({
@@ -19,7 +23,8 @@ const renderMainNav = () => {
     //significa que va a sustituir todas las acciones con mocks, pero si ponemos false, usará los datos reales de nuestro archivo que tiene la configuración de pinia
   });
 
-  useRoute.mockReturnValue({ name: 'Home' });
+  useRouteMock.mockReturnValue({ name: 'Home' });
+  // useRoute.mockReturnValue({ name: 'Home' });
   // const $route = {
   //   name: 'Home',
   // };

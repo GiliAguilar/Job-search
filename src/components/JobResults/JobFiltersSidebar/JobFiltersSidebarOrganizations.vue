@@ -58,7 +58,7 @@ export default {
 };
 </script> -->
 
-<script setup>
+<script lang="ts" setup>
 import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
 import { useJobsStore } from '@/stores/jobs';
 import { useUserStore } from '@/stores/user';
@@ -66,7 +66,7 @@ import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const selectedOrganizations = ref([]);
+const selectedOrganizations = ref<string[]>([]);
 const jobsStore = useJobsStore();
 const userStore = useUserStore();
 const UNIQUE_ORGANIZATIONS = computed(() => jobsStore.UNIQUE_ORGANIZATIONS);

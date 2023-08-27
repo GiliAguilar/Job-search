@@ -9,8 +9,38 @@
   </section>
 </template>
 
-<script>
-import nextElementInList from '@/utils/nextElementInList.js';
+<!-- Vue 3.2 -->
+<script lang="ts" setup>
+import nextElementInList from '@/utils/nextElementInList';
+import { ref, computed, onBeforeMount, onMounted, onBeforeUnmount } from 'vue';
+
+const actions = ref(['Build', 'Create', 'Design', 'Code']);
+const actionDefault = ref('');
+const interval = ref<ReturnType<typeof setInterval>>();
+//este es un truco, le decimos que ponga aquí el tipo de variable que regresa de la función setInterval(), que es una función de JavaScript
+
+const actionClasses = computed(() => ({ [actionDefault.value.toLocaleLowerCase()]: true }));
+const changeTitle = () => {
+  interval.value = setInterval(() => {
+    actionDefault.value = nextElementInList(actions.value, actionDefault.value);
+  }, 3000);
+};
+
+onBeforeMount(() => {
+  actionDefault.value = actions.value[0];
+});
+onMounted(changeTitle);
+// onMounted(() => {
+//   changeTitle();
+// });
+onBeforeUnmount(() => {
+  clearInterval(interval.value);
+});
+</script>
+
+<!-- Vue 2 y 3 old form -->
+<!-- <script>
+import nextElementInList from '@/utils/nextElementInList.ts';
 
 export default {
   name: 'TheHeadline',
@@ -57,7 +87,7 @@ export default {
     },
   },
 };
-</script>
+</script> -->
 
 <style scoped>
 .build {

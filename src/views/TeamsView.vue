@@ -12,6 +12,11 @@
   </header-container>
 </template>
 
+<script lang="ts" setup>
+import HeaderContainer from '@/components/Shared/HeaderContainer.vue';
+</script>
+
+<!-- Vue 2 y 3, old
 <script>
 import HeaderContainer from '@/components/Shared/HeaderContainer.vue';
 
@@ -21,4 +26,4 @@ export default {
     HeaderContainer,
   },
 };
-</script>
+</script> -->

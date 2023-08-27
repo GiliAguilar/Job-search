@@ -93,7 +93,35 @@
   </header>
 </template>
 
-<script>
+<script lang="ts" setup>
+import ActionButton from '@/components/Shared/ActionButton.vue';
+import ProfileImage from '@/components/Navigation/ProfileImage.vue';
+import SubNav from '@/components/Navigation/SubNav.vue';
+
+import { useUserStore } from '@/stores/user';
+import { ref, computed } from 'vue';
+
+//importamos mapStores desde pinia y nuestro User Store
+const userStore = useUserStore();
+const menuItems = ref([
+  { text: 'Teams', url: '/teams' },
+  { text: 'Locations', url: '/' },
+  { text: 'Life at GoogleClone Corp', url: '/' },
+  { text: 'How we hire', url: '/' },
+  { text: 'Students', url: '/' },
+  { text: 'Jobs', url: { name: 'JobResults' } },
+]);
+
+const LOGIN_USER = userStore.LOGIN_USER;
+const isLoggedIn = computed(() => userStore.isLoggedIn);
+const headerHeightClass = () => ({
+  'h-16': !isLoggedIn.value,
+  'h-32': isLoggedIn.value,
+});
+</script>
+
+<!-- Vue 2 y 3 old form -->
+<!-- <script>
 import ActionButton from '@/components/Shared/ActionButton.vue';
 import ProfileImage from '@/components/Navigation/ProfileImage.vue';
 import SubNav from '@/components/Navigation/SubNav.vue';
@@ -101,7 +129,7 @@ import SubNav from '@/components/Navigation/SubNav.vue';
 // import { mapStores } from 'pinia';
 import { mapState, mapActions } from 'pinia';
 
-import { useUserStore, LOGIN_USER } from '@/stores/user.js';
+import { useUserStore, LOGIN_USER } from '@/stores/user';
 
 //importamos mapStores desde pinia y nuestro User Store
 
@@ -157,4 +185,4 @@ export default {
     // },
   },
 };
-</script>
+</script> -->

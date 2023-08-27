@@ -55,14 +55,14 @@ export default {
 </script> -->
 
 <!-- Vue 3.2, new form -->
-<script setup>
+<script lang="ts" setup>
 import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
 import { useJobsStore } from '@/stores/jobs';
 import { useUserStore } from '@/stores/user';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-const selectedJobTypes = ref([]);
+const selectedJobTypes = ref<string[]>([]);
 const jobsStore = useJobsStore();
 const userStore = useUserStore();
 const UNIQUE_JOB_TYPES = computed(() => jobsStore.UNIQUE_JOB_TYPES);

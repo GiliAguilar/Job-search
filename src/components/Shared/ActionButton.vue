@@ -77,7 +77,7 @@ export default {
 </script> -->
 
 <!-- nueva forma con Vue 3.2 -->
-<script setup>
+<script lang="ts" setup>
 import { computed, toRefs } from 'vue';
 
 //no necesitamos usar export default, ni utilizar return, ni .this, tampoco data, methods, computed, etc..., todo lo que esté aquí definido estará disponible para <template> y <style>
@@ -90,7 +90,8 @@ const props = defineProps({
   type: {
     type: String,
     require: false,
-    validator(value) {
+    validator(value: string) {
+      // validator(value) {
       return ['primary', 'secondary'].includes(value.toLowerCase());
     },
     default: 'primary',

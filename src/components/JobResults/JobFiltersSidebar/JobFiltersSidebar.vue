@@ -46,14 +46,14 @@ export default {
 </script> -->
 
 <!-- Vue 3.2, new form, replacing old jobFilterSidebard -->
-<script setup>
+<script lang="ts" setup>
 import ActionButton from '@/components/Shared/ActionButton.vue';
 import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
 import { computed } from 'vue';
 import JobFiltersSidebarCheckboxGroup from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarCheckboxGroup.vue';
 
-import { useUserStore } from '@/stores/user.js';
-import { useJobsStore } from '@/stores/jobs.js';
+import { useUserStore } from '@/stores/user';
+import { useJobsStore } from '@/stores/jobs';
 
 const jobsStore = useJobsStore();
 const userStore = useUserStore();

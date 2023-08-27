@@ -19,15 +19,10 @@
   -->
 </template>
 
-<script>
+<script lang="ts" setup>
 import MainNav from '@/components/Navigation/MainNav.vue';
-export default {
-  name: 'App',
-  components: {
-    MainNav,
-  },
-};
 </script>
+
 <!-- 
 //Forma antigua, que agrega manualmente cada componente vue  
 <script>

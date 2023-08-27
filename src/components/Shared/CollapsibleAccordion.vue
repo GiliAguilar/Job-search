@@ -74,7 +74,7 @@ export default {
 </script> -->
 
 <!-- Nueva forma de escribir con Vue 3.2 -->
-<script setup>
+<script lang="ts" setup>
 import { computed, ref } from 'vue';
 
 defineProps({

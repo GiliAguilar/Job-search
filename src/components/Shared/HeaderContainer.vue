@@ -8,8 +8,12 @@
   </div>
 </template>
 
-<script>
+<!-- Vue 3.2 -->
+<!-- como el script no tiene nada, simplemente no ponemos script y listo, facil -->
+
+<!-- Vue 2 y 3 old form -->
+<!-- <script>
 export default {
   name: 'HeaderContainer',
 };
-</script>
+</script> -->

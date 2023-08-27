@@ -1,3 +1,5 @@
+import type { Mock } from 'vitest';
+
 import { render, screen } from '@testing-library/vue';
 import userEvent from '@testing-library/user-event';
 import { createTestingPinia } from '@pinia/testing';
@@ -8,6 +10,7 @@ import { useUserStore } from '@/stores/user';
 
 import { useRouter } from 'vue-router';
 vi.mock('vue-router');
+const useRouterMock = useRouter as Mock;
 
 describe('JobFiltersSidebarJobTypes', () => {
   const renderJobFiltersSidebarJobTypes = () => {
@@ -52,7 +55,8 @@ describe('JobFiltersSidebarJobTypes', () => {
 
   describe('when user clicks checkbox', () => {
     it('communicates that user has selected checkbos for job types', async () => {
-      useRouter.mockReturnValue({ push: vi.fn() });
+      useRouterMock.mockReturnValue({ push: vi.fn() });
+      // useRouter.mockReturnValue({ push: vi.fn() });
       //Vue 3.2
 
       const { userStore, jobsStore } = renderJobFiltersSidebarJobTypes();
@@ -72,7 +76,8 @@ describe('JobFiltersSidebarJobTypes', () => {
 
     it('navigates user to job results page to see fresh batch of filtered jobs', async () => {
       const push = vi.fn();
-      useRouter.mockReturnValue({ push });
+      useRouterMock.mockReturnValue({ push });
+      // useRouter.mockReturnValue({ push });
       //Vue 3.2
 
       const { jobsStore } = renderJobFiltersSidebarJobTypes();

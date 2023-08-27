@@ -20,7 +20,26 @@
   <!-- también se puede utilizar v-on:input="handleInput" o solo @input="handleInput", lo que llama al metodo que creamos para actualizará nuestros datos -->
 </template>
 
-<script>
+<!-- Vue 3.2 -->
+<script lang="ts" setup>
+defineProps({
+  modelValue: {
+    type: String,
+    required: true,
+  },
+});
+
+const emit = defineEmits(['update:modelValue']);
+
+const handleInput = ($event: Event) => {
+  const target = $event.target as HTMLInputElement;
+  // si no ponemos as HTMLInputElement, TS no sabe que es target, al poner lo mencionado le decimos que $event.target sea considerado como un elemento que ingresa a través del HTML
+  emit('update:modelValue', target.value);
+};
+</script>
+
+<!-- Vue 2 y 3, old form -->
+<!-- <script>
 export default {
   name: 'TextInput',
   props: {
@@ -68,4 +87,4 @@ export default {
 //     },
 //   },
 // };
-</script>
+</script> -->

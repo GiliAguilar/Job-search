@@ -6,6 +6,12 @@
   <!--1 <button @click="goToHome">Go to Home Page</button> -->
 </template>
 
+<script lang="ts" setup>
+import JobFiltersSidebar from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebar.vue';
+import JobListings from '@/components/JobResults/JobListings.vue';
+</script>
+
+<!-- Vue 2 y 3, old
 <script>
 import JobFiltersSidebar from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebar.vue';
 import JobListings from '@/components/JobResults/JobListings.vue';
@@ -23,4 +29,4 @@ export default {
   //   },
   // },
 };
-</script>
+</script> -->

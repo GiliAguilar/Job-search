@@ -1,11 +1,17 @@
+import type { Mock } from 'vitest';
+
 import axios from 'axios';
 import getJobs from '@/api/getJobs';
 
 vi.mock('axios');
 
+const axiosGetMock = axios.get as Mock;
+//con esto, le decimos a TS que estamos utilizando un fake axios
+
 describe('getJobs', () => {
   beforeEach(() => {
-    axios.get.mockResolvedValue({
+    axiosGetMock.mockResolvedValue({
+      // axios.get.mockResolvedValue({
       data: [
         {
           id: 1,

@@ -1,3 +1,5 @@
+import type { Mock } from 'vitest';
+
 import { render, screen } from '@testing-library/vue';
 import userEvent from '@testing-library/user-event';
 
@@ -5,13 +7,15 @@ import JobSearchForm from '@/components/JobSearch/JobSearchForm.vue';
 
 import { useRouter } from 'vue-router';
 vi.mock('vue-router');
+const useRouterMock = useRouter as Mock;
 
 describe('JobSearchForm', () => {
   describe('When user submit form', () => {
     it("Directs user to job results page with user's search parameters", async () => {
       const push = vi.fn();
       //Vue 3.2
-      useRouter.mockReturnValue({ push });
+      useRouterMock.mockReturnValue({ push });
+      // useRouter.mockReturnValue({ push });
       //Vue 2 y 3
       // const $router = { push };
       //hacemos un fake de router, que lo llenamos con una función del test ligera, que es vi.fn(); con que lo llena, no sabemos, pero permite hacer los test, en si, estamos simulando que creamos un push

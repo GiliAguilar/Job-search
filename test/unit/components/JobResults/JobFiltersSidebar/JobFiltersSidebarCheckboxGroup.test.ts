@@ -1,3 +1,5 @@
+import type { Mock } from 'vitest';
+
 import { render, screen } from '@testing-library/vue';
 import userEvent from '@testing-library/user-event';
 import { createTestingPinia } from '@pinia/testing';
@@ -6,16 +8,23 @@ import JobFiltersSidebarJobTypes from '@/components/JobResults/JobFiltersSidebar
 
 import { useRouter } from 'vue-router';
 vi.mock('vue-router');
+const useRouterMock = useRouter as Mock;
 
 describe('JobFiltersSidebarCheckboxGroup', () => {
-  const createProps = (props = {}) => ({
+  interface JobFiltersSidebarCheckboxGroupProps {
+    header: string;
+    uniqueValues: Set<string>;
+    action: Mock;
+  }
+
+  const createProps = (props: Partial<JobFiltersSidebarCheckboxGroupProps> = {}) => ({
     header: 'Some header',
     uniqueValues: new Set(['ValueA', 'ValueB']),
     action: vi.fn(),
     ...props,
   });
 
-  const renderJobFiltersSidebarCheckboxGroup = (props) => {
+  const renderJobFiltersSidebarCheckboxGroup = (props: JobFiltersSidebarCheckboxGroupProps) => {
     const pinia = createTestingPinia();
 
     render(JobFiltersSidebarJobTypes, {
@@ -51,7 +60,8 @@ describe('JobFiltersSidebarCheckboxGroup', () => {
   describe('when user clicks checkbox', () => {
     it('communicates that user has selected checkbos for value', async () => {
       const push = vi.fn();
-      useRouter.mockReturnValue({ push });
+      useRouterMock.mockReturnValue({ push });
+      // useRouter.mockReturnValue({ push });
       const action = vi.fn();
       const props = createProps({
         header: 'Job types',
@@ -60,7 +70,8 @@ describe('JobFiltersSidebarCheckboxGroup', () => {
       });
       renderJobFiltersSidebarCheckboxGroup(props);
 
-      useRouter.mockReturnValue({ push: vi.fn() });
+      useRouterMock.mockReturnValue({ push: vi.fn() });
+      // useRouter.mockReturnValue({ push: vi.fn() });
 
       const button = screen.getByRole('button', { name: /Job types/i });
       await userEvent.click(button);
@@ -75,7 +86,8 @@ describe('JobFiltersSidebarCheckboxGroup', () => {
 
     it('navigates user to job results page to see fresh batch of filtered jobs', async () => {
       const push = vi.fn();
-      useRouter.mockReturnValue({ push });
+      useRouterMock.mockReturnValue({ push });
+      // useRouter.mockReturnValue({ push });
 
       const props = createProps({
         header: 'Job types',

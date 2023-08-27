@@ -5,8 +5,15 @@ export const LOGIN_USER = 'LOGIN_USER';
 export const ADD_SELECTED_ORGANIZATIONS = 'ADD_SELECTED_ORGANIZATIONS';
 export const ADD_SELECTED_JOB_TYPES = 'ADD_SELECTED_JOB_TYPES';
 
+export interface UserState {
+  isLoggedIn: boolean;
+  selectedOrganizations: string[];
+  selectedJobTypes: string[];
+}
+
 export const useUserStore = defineStore('user', {
-  state: () => ({
+  state: (): UserState => ({
+    // state: () => ({
     isLoggedIn: false,
     selectedOrganizations: [],
     selectedJobTypes: [],
@@ -17,10 +24,10 @@ export const useUserStore = defineStore('user', {
     [LOGIN_USER]() {
       this.isLoggedIn = true;
     },
-    [ADD_SELECTED_ORGANIZATIONS](organizations) {
+    [ADD_SELECTED_ORGANIZATIONS](organizations: string[]) {
       this.selectedOrganizations = organizations;
     },
-    [ADD_SELECTED_JOB_TYPES](jobType) {
+    [ADD_SELECTED_JOB_TYPES](jobType: string[]) {
       this.selectedJobTypes = jobType;
     },
   },

@@ -29,16 +29,25 @@ export default {
 };
 </script> -->
 
-<script setup>
+<script lang="ts" setup>
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 //básicamente, todas nuestras funciones de Vue Cicling Hook, o del ciclo de Vue, están disponiebles como funciones, utilizando el prefijo "on" de primero, onMounted, onCreate, etc...
 
-const spotlights = ref([]);
+interface SpotLight {
+  id: number;
+  img: string;
+  title: string;
+  description: string;
+}
+
+const spotlights = ref<SpotLight[]>([]);
+//si no definimos aquí un interface, en el HTML (osea template), saltará un error porque Vue no sabrá que tipo de datos contendrá spotlights, y a su vez en template marcará error porque buscará sobre un array que contiene "unkwon"
 const getSpotlights = async () => {
   const baseUrl = import.meta.env.VITE_APP_API_URL;
   const url = `${baseUrl}/spotlights`;
-  const response = await axios.get(url);
+  const response = await axios.get<SpotLight[]>(url);
+  //lo mismo aquí, debemos decirle a TS que tipo de datos recibirá
   spotlights.value = response.data;
 };
 onMounted(getSpotlights);
