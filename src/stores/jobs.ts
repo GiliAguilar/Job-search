@@ -14,6 +14,7 @@ export const FILTERED_JOBS = 'FILTERED_JOBS';
 
 export const INCLUDE_JOB_BY_ORGANIZATION = 'INCLUDE_JOB_BY_ORGANIZATION';
 export const INCLUDE_JOB_BY_JOB_TYPE = 'INCLUDE_JOB_BY_JOB_TYPE';
+export const INCLUDE_JOB_BY_DEGREE = 'INCLUDE_JOB_BY_DEGREE';
 
 export interface JobsState {
   jobs: Job[];
@@ -63,7 +64,7 @@ export const useJobsStore = defineStore('jobs', {
 
     [INCLUDE_JOB_BY_ORGANIZATION]: () => (job: Job) => {
       // [INCLUDE_JOB_BY_ORGANIZATION]: () => (job) => {
-      //en getters el único parámetro que debe pasarse es siempre state, no hay de otra, pero podemos evitarlo, para poder pasar un parametro que no sea state, lo que devemos hacer es devolver una función. Primero creamos un properties, no una función, como este, en el properties creamos una función que recibe state y, si no usamos ese state para nada, simpolemente no lo pones, como aquí, luego de esa función devolvemos una función que si reciba parámetros, por eso es ":() => (job) => {}", entonces Pinia va a entender que, cuando se llame a esta función debe fluir el parámetro en su segunda función, porque la primera siempre será state.
+      //en getters el único parámetro que debe pasarse es siempre state, no hay de otra, pero podemos evitarlo, para poder pasar un parametro que no sea state, lo que devemos hacer es devolver una función. Primero creamos un properties, no una función, como este, en el properties creamos una función que recibe state y, si no usamos ese state NO para nada, simpolemente no lo pones, como aquí, luego de esa función devolvemos una función que si reciba parámetros, por eso es ":() => (job) => {}", entonces Pinia va a entender que, cuando se llame a esta función debe fluir el parámetro en su segunda función, porque la primera siempre será state.
       const userStore = useUserStore();
       if (userStore.selectedOrganizations.length === 0) return true;
       return userStore.selectedOrganizations.includes(job.organization);
@@ -73,6 +74,12 @@ export const useJobsStore = defineStore('jobs', {
       const userStore = useUserStore();
       if (userStore.selectedJobTypes.length === 0) return true;
       return userStore.selectedJobTypes.includes(job.jobType);
+    },
+
+    [INCLUDE_JOB_BY_DEGREE]: () => (job: Job) => {
+      const userStore = useUserStore();
+      if (userStore.selectedDegrees.length === 0) return true;
+      return userStore.selectedDegrees.includes(job.degree);
     },
 
     [FILTERED_JOBS](state): Job[] {
@@ -95,7 +102,8 @@ export const useJobsStore = defineStore('jobs', {
           // if (noSelectedJobType) return true;
           // return userStore.selectedJobTypes.includes(job.jobType);
           return this.INCLUDE_JOB_BY_JOB_TYPE(job);
-        });
+        })
+        .filter((job) => this.INCLUDE_JOB_BY_DEGREE(job));
     },
   },
 });

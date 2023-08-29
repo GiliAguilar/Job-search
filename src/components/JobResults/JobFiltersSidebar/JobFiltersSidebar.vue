@@ -8,7 +8,14 @@
         </div>
       </div>
 
-      <CollapsibleAccordion header="Degree"></CollapsibleAccordion>
+      <!-- <CollapsibleAccordion header="Degree"></CollapsibleAccordion> -->
+
+      <job-filters-sidebar-checkbox-group
+        header="Degrees"
+        :unique-values="UNIQUE_DEGREES"
+        :action="userStore.ADD_SELECTED_DEGREES"
+      />
+      <!-- aquí unique_values daba error de tipo, porque UNIQUE_DEGREES es un array, y esperaba originalmente un Set, por lo que se modifica el tipo de lo que se espera, en el componente que se está llamando, en este caso JobFiltersSidebarCheckboxGroup -->
 
       <job-filters-sidebar-checkbox-group
         header="Job types"
@@ -52,12 +59,15 @@ import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
 import { computed } from 'vue';
 import JobFiltersSidebarCheckboxGroup from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarCheckboxGroup.vue';
 
-import { useUserStore } from '@/stores/user';
+import { ADD_SELECTED_DEGREES, useUserStore } from '@/stores/user';
 import { useJobsStore } from '@/stores/jobs';
+import { useDegreesStore } from '@/stores/degrees';
 
 const jobsStore = useJobsStore();
 const userStore = useUserStore();
+const degreesStore = useDegreesStore();
 
 const UNIQUE_ORGANIZATIONS = computed(() => jobsStore.UNIQUE_ORGANIZATIONS);
 const UNIQUE_JOB_TYPES = computed(() => jobsStore.UNIQUE_JOB_TYPES);
+const UNIQUE_DEGREES = computed(() => degreesStore.UNIQUE_DEGREES);
 </script>

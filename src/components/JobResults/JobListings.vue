@@ -109,15 +109,17 @@ import { useJobsStore } from '@/stores/jobs';
 import { onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import usePreviosAndNextPages from '@/composables/usePreviosAndNextPages';
+import { useDegreesStore } from '@/stores/degrees';
 
 const jobsStore = useJobsStore();
+const degreesStore = useDegreesStore();
 const route = useRoute();
+
 const FILTERED_JOBS = computed(() => jobsStore.FILTERED_JOBS);
 
 const currentPage = computed(() => Number.parseInt((route.query.page as string) || '1'));
 //aquí le debemos decir que route.query.page será un string siempre
 const maxPage = computed(() => Math.ceil(FILTERED_JOBS.value.length / 10));
-
 const { previousPage, nextPage } = usePreviosAndNextPages(currentPage, maxPage);
 //no se necestia usar ref o toRef porque usePreviosAndNExtPages devuelve dos funciones ya reactivas que no vamos a sobreescribir
 
@@ -130,5 +132,8 @@ const displayedJobs = computed(() => {
   return FILTERED_JOBS.value.slice(firstJobIndex, lastJobIndex);
 });
 
-onMounted(jobsStore.FETCH_JOBS);
+onMounted(() => {
+  jobsStore.FETCH_JOBS();
+  degreesStore.FETCH_DEGREES();
+});
 </script>

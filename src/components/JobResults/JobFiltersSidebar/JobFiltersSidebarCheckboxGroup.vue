@@ -30,7 +30,8 @@ const props = defineProps({
     required: true,
   },
   uniqueValues: {
-    type: Set<string>,
+    type: [Set<string>, Array<string>],
+    //aquí podemos decirle que considere más de un tipo, usando una sintaxis de array
     required: true,
   },
   action: {

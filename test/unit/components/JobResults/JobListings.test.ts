@@ -12,6 +12,7 @@ import JobListings from '@/components/JobResults/JobListings.vue';
 //esto hará que cada vez que llamemos a axios, todas sus propiedades sean reemplazadas con funciones vi mock, osea, falsas, para simular su funcionamiento
 
 import { useJobsStore } from '@/stores/jobs';
+import { useDegreesStore } from '@/stores/degrees';
 
 import { useRoute } from 'vue-router';
 import { vi } from 'vitest';
@@ -26,6 +27,8 @@ describe('JobListings', () => {
     const jobsStore = useJobsStore();
     jobsStore.FILTERED_JOBS = Array(15).fill({});
     //Vue 3.2 new test for FILTERED_JOBS
+
+    const degreesStore = useDegreesStore();
 
     render(JobListings, {
       global: {
@@ -45,7 +48,7 @@ describe('JobListings', () => {
         },
       },
     });
-    return { jobsStore };
+    return { jobsStore, degreesStore };
     //Vue 3.2 new test for FILTERED_JOBS
   };
 
@@ -65,6 +68,13 @@ describe('JobListings', () => {
     //este url es el que se crea siempre con axios, siempre... y termina con jobs porque eso es lo que va a montar la función mounted()
 
     expect(jobsStore.FETCH_JOBS).toHaveBeenCalled();
+  });
+
+  it('fetches degrees', () => {
+    useRouteMock.mockReturnValue({ query: {} });
+    const { degreesStore } = renderJobListing();
+
+    expect(degreesStore.FETCH_DEGREES).toHaveBeenCalled();
   });
 
   it('displays maximum of 10 jobs', async () => {
