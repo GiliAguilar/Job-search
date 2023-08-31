@@ -114,10 +114,10 @@ const menuItems = ref([
 
 const LOGIN_USER = userStore.LOGIN_USER;
 const isLoggedIn = computed(() => userStore.isLoggedIn);
-const headerHeightClass = () => ({
+const headerHeightClass = computed(() => ({
   'h-16': !isLoggedIn.value,
   'h-32': isLoggedIn.value,
-});
+}));
 </script>
 
 <!-- Vue 2 y 3 old form -->
