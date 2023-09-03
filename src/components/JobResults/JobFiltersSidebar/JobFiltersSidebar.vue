@@ -63,8 +63,6 @@ export default {
 <!-- Vue 3.2, new form, replacing old jobFilterSidebard -->
 <script lang="ts" setup>
 import ActionButton from '@/components/Shared/ActionButton.vue';
-// import { computed } from 'vue';
-// import JobFiltersSidebarCheckboxGroup from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarCheckboxGroup.vue';
 import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
 import JobFiltersSidebarDegrees from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarDegrees.vue';
 import JobFiltersSidebarJobTypes from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarJobTypes.vue';
@@ -77,18 +75,6 @@ import { onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useUserStore } from '@/stores/user';
 
-// import { useUserStore } from '@/stores/user';
-// import { useJobsStore } from '@/stores/jobs';
-// import { useDegreesStore } from '@/stores/degrees';
-
-// const userStore = useUserStore();
-// const jobsStore = useJobsStore();
-// const degreesStore = useDegreesStore();
-
-// const UNIQUE_ORGANIZATIONS = computed(() => jobsStore.UNIQUE_ORGANIZATIONS);
-// const UNIQUE_JOB_TYPES = computed(() => jobsStore.UNIQUE_JOB_TYPES);
-// const UNIQUE_DEGREES = computed(() => degreesStore.UNIQUE_DEGREES);
-
 const route = useRoute();
 const userStore = useUserStore();
 
@@ -96,5 +82,4 @@ onMounted(() => {
   const role = (route.query.role as string) || '';
   userStore.UPDATE_SKILLS_SEARCH_TERM(role);
 });
-//aquí lo que estamos haciendo es decirle que lea nuestra key de nuestro url, si tiene información en la key role, que la ponga directamente en nuestro userStore
 </script>
