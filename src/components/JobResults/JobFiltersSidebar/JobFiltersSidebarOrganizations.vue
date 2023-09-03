@@ -1,5 +1,10 @@
 <template>
-  <collapsible-accordion header="Organization">
+  <job-filters-sidebar-checkbox-group
+    :unique-values="UNIQUE_ORGANIZATIONS"
+    :action="userStore.ADD_SELECTED_ORGANIZATIONS"
+  />
+
+  <!-- <collapsible-accordion header="Organization">
     <fieldset>
       <ul class="flex flex-row flex-wrap">
         <li v-for="i in UNIQUE_ORGANIZATIONS" :key="i" class="h-8 w-1/2">
@@ -11,15 +16,15 @@
             class="mr-3"
             @change="selectOrganization"
           />
-          <!-- aquí, el :id lo que hace es como poner de referencia que este input tendrá nombre id=i, luego con v-model lo que hacemos es decirle a Vue que la variable que esté pasando por aquí se vaya a donde le indicamos (v-model="selectedOrganizations"), y luego la variable que pasa por aquí se asigna con value=i, para que sea de forma dinámica que asigne valores, siempre se pone v-bind ante de value y id (":")
+           aquí, el :id lo que hace es como poner de referencia que este input tendrá nombre id=i, luego con v-model lo que hacemos es decirle a Vue que la variable que esté pasando por aquí se vaya a donde le indicamos (v-model="selectedOrganizations"), y luego la variable que pasa por aquí se asigna con value=i, para que sea de forma dinámica que asigne valores, siempre se pone v-bind ante de value y id (":")
 
           Ahora bien, vamos a actualizar nuestro Pinia, para eso vamos a llamar a un method que haga ese trabajo, usamos para eso v-on, para escuchar al DOM, y le decimos que si el html cambie que ejecute nuestro method, osea v-on:change="selectOrganization", por lo cual, hay que utilizar v-on:change, lo que observará cuando exista un cambio en nuestro HTML, y siguiente, llamará al metodo elegido, en este caso, selectOrganization
-          -->
+
           <label :for="i">{{ i }}</label>
         </li>
       </ul>
     </fieldset>
-  </collapsible-accordion>
+  </collapsible-accordion> -->
 </template>
 
 <!-- VUe 2 y 3 mix, old form -->
@@ -59,20 +64,21 @@ export default {
 </script> -->
 
 <script lang="ts" setup>
-import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
+// import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
+import JobFiltersSidebarCheckboxGroup from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarCheckboxGroup.vue';
 import { useJobsStore } from '@/stores/jobs';
 import { useUserStore } from '@/stores/user';
-import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed } from 'vue';
+// import { useRouter } from 'vue-router';
 
-const router = useRouter();
-const selectedOrganizations = ref<string[]>([]);
+// const router = useRouter();
+// const selectedOrganizations = ref<string[]>([]);
 const jobsStore = useJobsStore();
 const userStore = useUserStore();
 const UNIQUE_ORGANIZATIONS = computed(() => jobsStore.UNIQUE_ORGANIZATIONS);
 
-const selectOrganization = () => {
-  userStore.ADD_SELECTED_ORGANIZATIONS(selectedOrganizations.value);
-  router.push({ name: 'JobResults' });
-};
+// const selectOrganization = () => {
+//   userStore.ADD_SELECTED_ORGANIZATIONS(selectedOrganizations.value);
+//   router.push({ name: 'JobResults' });
+// };
 </script>

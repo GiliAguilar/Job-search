@@ -2,11 +2,11 @@ import { defineStore } from 'pinia';
 //importamos un almacenamiento desde pinia
 
 // OLD FORM WITHOUT VUE
-// export const LOGIN_USER = 'LOGIN_USER';
-// export const ADD_SELECTED_ORGANIZATIONS = 'ADD_SELECTED_ORGANIZATIONS';
-// export const ADD_SELECTED_JOB_TYPES = 'ADD_SELECTED_JOB_TYPES';
-// export const ADD_SELECTED_DEGREES = 'ADD_SELECTED_DEGREES';
-// export const CLEAR_USER_JOB_FILTER_SELECTIONS = 'CLEAR_USER_JOB_FILTER_SELECTIONS';
+export const LOGIN_USER = 'LOGIN_USER';
+export const ADD_SELECTED_ORGANIZATIONS = 'ADD_SELECTED_ORGANIZATIONS';
+export const ADD_SELECTED_JOB_TYPES = 'ADD_SELECTED_JOB_TYPES';
+export const ADD_SELECTED_DEGREES = 'ADD_SELECTED_DEGREES';
+export const CLEAR_USER_JOB_FILTER_SELECTIONS = 'CLEAR_USER_JOB_FILTER_SELECTIONS';
 
 // export interface UserState {
 //   isLoggedIn: boolean;
@@ -15,17 +15,16 @@ import { defineStore } from 'pinia';
 //   selectedDegrees: string[];
 // }
 
-
 import { ref } from 'vue';
 
-
-//NEW FORM WITH VUE
+// NEW FORM WITH VUE
 export const useUserStore = defineStore('user', () => {
   //STATE
   const isLoggedIn = ref(false);
   const selectedOrganizations = ref<string[]>([]);
   const selectedJobTypes = ref<string[]>([]);
   const selectedDegrees = ref<string[]>([]);
+  const skillsSearchTerm = ref('');
 
   //ACTIONS
   const LOGIN_USER = () => {
@@ -40,10 +39,14 @@ export const useUserStore = defineStore('user', () => {
   const ADD_SELECTED_DEGREES = (degrees: string[]) => {
     selectedDegrees.value = degrees;
   };
+  const UPDATE_SKILLS_SEARCH_TERM = (term: string) => {
+    skillsSearchTerm.value = term;
+  };
   const CLEAR_USER_JOB_FILTER_SELECTIONS = () => {
     selectedDegrees.value = [];
     selectedJobTypes.value = [];
     selectedOrganizations.value = [];
+    skillsSearchTerm.value = '';
   };
 
   return {
@@ -51,15 +54,17 @@ export const useUserStore = defineStore('user', () => {
     selectedDegrees,
     selectedJobTypes,
     selectedOrganizations,
+    skillsSearchTerm,
     LOGIN_USER,
     ADD_SELECTED_DEGREES,
     ADD_SELECTED_JOB_TYPES,
     ADD_SELECTED_ORGANIZATIONS,
+    UPDATE_SKILLS_SEARCH_TERM,
     CLEAR_USER_JOB_FILTER_SELECTIONS,
   };
 });
 
-// OLD FORM WITHOUT VUE
+// // OLD FORM WITHOUT VUE
 // export const useUserStore = defineStore('user', {
 //   state: (): UserState => ({
 //     // state: () => ({

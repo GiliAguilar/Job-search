@@ -1,5 +1,10 @@
 <template>
-  <collapsible-accordion header="Job types">
+  <job-filters-sidebar-checkbox-group
+    :unique-values="UNIQUE_JOB_TYPES"
+    :action="userStore.ADD_SELECTED_JOB_TYPES"
+  />
+
+  <!-- <collapsible-accordion header="Job types">
     <fieldset>
       <ul class="flex flex-row flex-wrap">
         <li v-for="i in UNIQUE_JOB_TYPES" :key="i" class="h-8 w-1/2">
@@ -16,7 +21,7 @@
         </li>
       </ul>
     </fieldset>
-  </collapsible-accordion>
+  </collapsible-accordion> -->
 </template>
 
 <!-- Vue 2 y 3, old mix form -->
@@ -56,22 +61,23 @@ export default {
 
 <!-- Vue 3.2, new form -->
 <script lang="ts" setup>
-import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
+// import CollapsibleAccordion from '@/components/Shared/CollapsibleAccordion.vue';
+import JobFiltersSidebarCheckboxGroup from '@/components/JobResults/JobFiltersSidebar/JobFiltersSidebarCheckboxGroup.vue';
 import { useJobsStore } from '@/stores/jobs';
 import { useUserStore } from '@/stores/user';
-import { computed, ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { computed } from 'vue';
+// import { useRouter } from 'vue-router';
 
-const selectedJobTypes = ref<string[]>([]);
+// const selectedJobTypes = ref<string[]>([]);
 const jobsStore = useJobsStore();
 const userStore = useUserStore();
 const UNIQUE_JOB_TYPES = computed(() => jobsStore.UNIQUE_JOB_TYPES);
 
-const router = useRouter();
+// const router = useRouter();
 
-const selectJobTypes = () => {
-  userStore.ADD_SELECTED_JOB_TYPES(selectedJobTypes.value);
-  //no hace falta usar computed() para userStore.ADD_SELECTED_JOB_TYPES, porque el valor se llamará cada vez que la función sea llamada, la función hace el trabajo de reatividad
-  router.push({ name: 'JobResults' });
-};
+// const selectJobTypes = () => {
+//   userStore.ADD_SELECTED_JOB_TYPES(selectedJobTypes.value);
+//   //no hace falta usar computed() para userStore.ADD_SELECTED_JOB_TYPES, porque el valor se llamará cada vez que la función sea llamada, la función hace el trabajo de reatividad
+//   router.push({ name: 'JobResults' });
+// };
 </script>

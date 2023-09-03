@@ -3,7 +3,7 @@ import getJobs from '@/api/getJobs';
 
 import { useUserStore } from '@/stores/user';
 
-import type { Job } from '@/api/types.ts';
+import type { Job } from '@/api/types';
 
 export const FETCH_JOBS = 'FETCH_JOBS';
 export const UNIQUE_ORGANIZATIONS = 'UNIQUE_ORGANIZATIONS';
@@ -15,6 +15,7 @@ export const FILTERED_JOBS = 'FILTERED_JOBS';
 export const INCLUDE_JOB_BY_ORGANIZATION = 'INCLUDE_JOB_BY_ORGANIZATION';
 export const INCLUDE_JOB_BY_JOB_TYPE = 'INCLUDE_JOB_BY_JOB_TYPE';
 export const INCLUDE_JOB_BY_DEGREE = 'INCLUDE_JOB_BY_DEGREE';
+export const INCLUDE_JOB_BY_SKILL = 'INCLUDE_JOB_BY_SKILL';
 
 export interface JobsState {
   jobs: Job[];
@@ -82,6 +83,11 @@ export const useJobsStore = defineStore('jobs', {
       return userStore.selectedDegrees.includes(job.degree);
     },
 
+    [INCLUDE_JOB_BY_SKILL]: () => (job: Job) => {
+      const userStore = useUserStore();
+      return job.title.toLocaleLowerCase().includes(userStore.skillsSearchTerm.toLocaleLowerCase());
+    },
+
     [FILTERED_JOBS](state): Job[] {
       //aquí especificamos el valor de retorno, que será un array de Job.
 
@@ -103,7 +109,8 @@ export const useJobsStore = defineStore('jobs', {
           // return userStore.selectedJobTypes.includes(job.jobType);
           return this.INCLUDE_JOB_BY_JOB_TYPE(job);
         })
-        .filter((job) => this.INCLUDE_JOB_BY_DEGREE(job));
+        .filter((job) => this.INCLUDE_JOB_BY_DEGREE(job))
+        .filter((job) => this[INCLUDE_JOB_BY_SKILL](job));
     },
   },
 });
